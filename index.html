@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI4EFL Project</title>
+    
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons --><script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Additional styles to ensure the layout takes up the full height */
+        html, body, #app {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Verdana', sans-serif;
+        }
+        .lang-button {
+            padding: 2px 6px; 
+            border-radius: 6px;
+            border: 1px solid white;
+            color: white;
+            background-color: transparent;
+            transition: background-color 0.3s;
+            font-size: 0.875rem; /* Default font size */
+        }
+        .lang-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .lang-button.active {
+            background-color: white;
+            color: #0ea5e9; /* sky-500 */
+            font-weight: bold;
+        }
+
+        /* Aplicar Montserrat al título */
+        .header-title {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Adjustments for small screens (mobile) */
+        @media (max-width: 640px) { /* Tailwind's 'sm' breakpoint */
+            .lang-button {
+                padding: 1px 4px; /* Even smaller padding for mobile */
+                font-size: 0.75rem; /* Even smaller font size for mobile */
+            }
+            .header-title {
+                font-size: 1.125rem; /* Smaller title on mobile */
+                /* *** NUEVO *** Añadido padding para evitar superposición */
+                padding-left: 44px;  /* Espacio para el botón de menú */
+                padding-right: 90px; /* Espacio para los botones de idioma */
+                box-sizing: border-box; /* Asegura que el padding se calcule correctamente */
+            }
+             .lang-buttons-container {
+                position: absolute;
+                right: 4px; /* A little more to the right */
+                top: 50%;
+                transform: translateY(-50%);
+                display: flex;
+                gap: 4px; /* Space between buttons */
+            }
+            .header-content {
+                /* justify-content: space-between; */
+                padding: 8px 4px; /* Adjust header padding */
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="app" class="flex h-screen bg-gray-100 font-sans">
+        <!-- The application content will be rendered here --></div>
+
+    <script>
+        // --- Logo and Link URLs ---
+        const logo3Url = "https://upla.cl/facultad/cienciasnaturalesyexactas/wp-content/uploads/2022/09/05-fac-cs-naturales.png";
+        const logo3Link = "https://upla.cl/facultad/cienciasnaturalesyexactas/";
+        const logo4Url = "https://upla.cl/facultad/humanidades/wp-content/uploads/2022/01/04-fact-humanidades.png";
+        const logo4Link = "https://upla.cl/facultad/humanidades/";
+        const logo5Url = "https://hacertfg.com/wp-content/uploads/2022/06/Universidad-Rovira-i-Virgili.png";
+        const logo5Link = "https://www.urv.cat/";
+        const logoUnapUrl = "https://roxanarebolledo.com/ai4efl/logo-unap.jpg";
+        const logoUnapLink = "https://www.unap.cl/";
+        const logoUfroUrl = "https://roxanarebolledo.com/ai4efl/logo-ufro.png";
+        const logoUfroLink = "https://www.ufro.cl/";
+        const logoUcenUrl = "https://roxanarebolledo.com/ai4efl/logo-ucen.png";
+        const logoUcenLink = "https://www.ucentral.cl/";
+        const sidebarImageUrl = "https://roxanarebolledo.com/ai4efl/logo5.gif";
+
+        // --- Translations ---
+        const translations = {
+            en: {
+                navItems: [
+                    { id: 'descripcion', label: 'Project Presentation' },
+                    { id: 'estructura', label: 'Project sessions' },
+                    { id: 'preTest', label: 'Session 0: Pre-test' },
+                    { id: 'bloque1', label: 'Session 1: AI feedback' },
+                    { id: 'bloque2', label: 'Session 2: Brainstorming & research' },
+                    { id: 'bloque3', label: 'Session 3: Thesis statement' },
+                    { id: 'bloque4', label: 'Session 4: Body paragraphs & conclusion' },
+                    { id: 'evaluacion', label: 'Session 5: App design' },
+                    { id: 'postTest', label: 'Session 6: Post-test' },
+                    { id: 'relatora', label: 'Responsible researcher' },
+                ],
+                courseData: {
+                    descripcion: {
+                        icon: 'info', title: "Project Presentation", pageHeader: "AI4EFL Project", details: [], introVideoUrl: "https://www.youtube.com/embed/S0ixNE8DMbg?si=sHtuMuGZCFc6BncJ",
+                        projectTitle: "Application of Artificial Intelligence in the Adaptive Learning of English as a Foreign Language",
+                        ethicsText: `This research has been approved by the CEIPSA Ethics Committee under approval code <a href="https://drive.google.com/file/d/1wUXst0BgWyYzpxUXe-qOsqjqoWbtbGAY/view?usp=drive_link" target="_blank" class="text-sky-600 underline hover:text-sky-800 font-semibold">see approval (CEIPSA 05/2025)</a>, in the session held on June 10, 2025.`,
+                        organizedBy: "Organized by:",
+                        participating: "Participating universities:",
+                        visitWebsite: "Visit the project website"
+                    },
+                    preTest: { icon: 'clipboard-list', title: "Session 0: Pre-test", content: "Identify the initial level of competence in essay writing in English by producing an essay with the support of a detailed outline, without the use of artificial intelligence." },
+                    estructura: { icon: 'sitemap', title: "Project sessions", customHtml: `<div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg border border-gray-200"><img src="https://roxanarebolledo.com/ai4efl/sequence-en.png" alt="Project Sequence" class="w-full h-auto rounded-lg"></div>` },
+                    bloque1: { icon: 'book-open', title: "Session 1: Self-assessment and AI feedback", content: "Develop the ability to self-assess one’s own essay using a rubric adapted to the student’s level. Compare self-assessment with feedback generated by AI tools like DeepSeek and Claude, fostering critical reflection on strengths and areas for improvement." },
+                    bloque2: { icon: 'cpu', title: "Session 2: Brainstorming and researching sources", content: "Generate and expand ideas for essay development using AI-assisted brainstorming techniques. Explore and evaluate automated sources through Perplexity to support arguments with reliable sources." },
+                    bloque3: { icon: 'award', title: "Session 3: Deepen thesis statement", content: "Improve the formulation, clarity, and relevance of the thesis statement as the central element of the essay. Use NotebookLM to organize ideas and sources that strengthen coherence and argumentation in writing." },
+                    bloque4: { icon: 'puzzle', title: "Session 4: Step-by-step guidance for writing body paragraphs and conclusion", content: "Write body paragraphs that align coherently with the thesis statement and include evidence-based arguments. Produce a conclusion that summarizes ideas, reaffirms the thesis, and provides logical closure." },
+                    evaluacion: { icon: 'award', title: "Session 5: Designing an app to overcome essay writing weaknesses", content: "Design a simple AI-powered application to address a personal difficulty in essay writing (e.g., connectors, vocabulary, organization of ideas). Foster autonomy and creativity in using technological tools applied to academic writing.", details: [], summary: "" },
+                    postTest: { icon: 'clipboard-check', title: "Session 6: Post-test", content: "Evaluate progress in essay writing by producing a new essay, this time with only the basic outline of main parts provided and without AI support. Compare results with the pre-test to demonstrate progress in autonomy, coherence, and writing competence." },
+                    relatora: { icon: 'user', title: "Responsible researcher", name: "Roxana Rebolledo Font de la Vall", details: ["English Teacher and Bachelor of Education", "Master in Educational Communication and NICT", "PhD (c) in Educational Technology", "Moodle Certified Educator (MEC)"], website: "roxanarebolledo.com", experienceUrl: "https://roxanarebolledo.com/experiencia", trajectoryUrl: "https://youtu.be/b6HHYKbMCmg?si=zkdyBrYc8xX8EhGa", visitWebsiteButton: "Visit Website", aiExperienceButton: "AI Experience", careerPathButton: "Career Path" }
+                }
+            },
+            es: {
+                navItems: [
+                    { id: 'descripcion', label: 'Presentación del Proyecto' },
+                    { id: 'estructura', label: 'Sesiones del Proyecto' },
+                    { id: 'preTest', label: 'Sesión 0: Pre-evaluación' },
+                    { id: 'bloque1', label: 'Sesión 1: Feedback con IA' },
+                    { id: 'bloque2', label: 'Sesión 2: Ideas e investigación' },
+                    { id: 'bloque3', label: 'Sesión 3: Tesis' },
+                    { id: 'bloque4', label: 'Sesión 4: Párrafos y conclusión' },
+                    { id: 'evaluacion', label: 'Sesión 5: Diseño de app' },
+                    { id: 'postTest', label: 'Sesión 6: Post-evaluación' },
+                    { id: 'relatora', label: 'Investigadora Responsable' },
+                ],
+                courseData: {
+                    descripcion: {
+                        icon: 'info', title: "Presentación del Proyecto", pageHeader: "Proyecto AI4EFL", details: [], introVideoUrl: "https://www.youtube.com/embed/S0ixNE8DMbg?si=sHtuMuGZCFc6BncJ",
+                        projectTitle: "Investigación: Aplicación de la Inteligencia Artificial en el Aprendizaje Adaptativo del Inglés como Lengua Extranjera",
+                        ethicsText: `Esta investigación ha sido aprobada por el Comité de Ética CEIPSA con el código de aprobación <a href="https://drive.google.com/file/d/1FXNuoBJalkiQr8x7_ownWHNndoRsPXL0/view?usp=drive_link" target="_blank" class="text-sky-600 underline hover:text-sky-800 font-semibold">ver aprobación (CEIPSA 05/2GE/2025)</a>, en la sesión del 10 de junio de 2025.`,
+                        organizedBy: "Organizado por:",
+                        participating: "Universidades participantes:",
+                        visitWebsite: "Visitar el sitio del proyecto"
+                    },
+                    preTest: { icon: 'clipboard-list', title: "Sesión 0: Pre-evaluación", content: "Identificar el nivel inicial de competencia en la escritura de ensayos en inglés mediante la producción de un ensayo con el apoyo de un esquema detallado, sin el uso de inteligencia artificial." },
+                    estructura: { icon: 'sitemap', title: "Sesiones del Proyecto", customHtml: `<div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg border border-gray-200"><img src="https://roxanarebolledo.com/ai4efl/sequence-es.png" alt="Secuencia del Proyecto" class="w-full h-auto rounded-lg"></div>` },
+                    bloque1: { icon: 'book-open', title: "Sesión 1: Autoevaluación y feedback con IA", content: "Desarrollar la capacidad de autoevaluar el propio ensayo utilizando una rúbrica adaptada al nivel del estudiante. Comparar la autoevaluación con el feedback generado por herramientas de IA como DeepSeek y Claude, fomentando la reflexión crítica sobre fortalezas y áreas de mejora." },
+                    bloque2: { icon: 'cpu', title: "Sesión 2: Lluvia de ideas y búsqueda de fuentes", content: "Generar y expandir ideas para el desarrollo de ensayos utilizando técnicas de lluvia de ideas asistidas por IA. Explorar y evaluar fuentes automatizadas a través de Perplexity para apoyar los argumentos con fuentes fiables." },
+                    bloque3: { icon: 'award', title: "Sesión 3: Profundizar la tesis", content: "Mejorar la formulación, claridad y relevancia de la tesis como elemento central del ensayo. Utilizar NotebookLM para organizar ideas y fuentes que fortalezcan la coherencia y la argumentación en la escritura." },
+                    bloque4: { icon: 'puzzle', title: "Sesión 4: Guía paso a paso para escribir párrafos de desarrollo y conclusión", content: "Escribir párrafos de desarrollo que se alineen coherentemente con la tesis e incluyan argumentos basados en evidencia. Producir una conclusión que resuma las ideas, reafirme la tesis y proporcione un cierre lógico." },
+                    evaluacion: { icon: 'award', title: "Sesión 5: Diseñando una app para superar debilidades en la escritura", content: "Diseñar una aplicación simple impulsada por IA para abordar una dificultad personal en la escritura de ensayos (por ejemplo, conectores, vocabulario, organización de ideas). Fomentar la autonomía y la creatividad en el uso de herramientas tecnológicas aplicadas a la escritura académica." },
+                    postTest: { icon: 'clipboard-check', title: "Sesión 6: Post-evaluación", content: "Evaluar el progreso en la escritura de ensayos mediante la producción de un nuevo ensayo, esta vez solo con el esquema básico de las partes principales y sin apoyo de IA. Comparar los resultados con la pre-evaluación para demostrar el progreso en autonomía, coherencia y competencia en la escritura." },
+                    relatora: { icon: 'user', title: "Investigadora Responsable", name: "Roxana Rebolledo Font de la Vall", details: ["Profesora de Inglés y Licenciada en Educación", "Magíster en Comunicación Educativa y NTIC", "Doctora (c) en Tecnología Educativa", "Certificada en Moodle (MEC)"], website: "roxanarebolledo.com", experienceUrl: "https://roxanarebolledo.com/experiencia", trajectoryUrl: "https://youtu.be/b6HHYKbMCmg?si=zkdyBrYc8xX8EhGa", visitWebsiteButton: "Visitar Sitio Web", aiExperienceButton: "Experiencia en IA", careerPathButton: "Trayectoria" }
+                }
+            },
+            ca: {
+                navItems: [
+                    { id: 'descripcion', label: 'Presentació del Projecte' },
+                    { id: 'estructura', label: 'Sessions del Projecte' },
+                    { id: 'preTest', label: 'Sessió 0: Pre-avaluació' },
+                    { id: 'bloque1', label: 'Sessió 1: Feedback amb IA' },
+                    { id: 'bloque2', label: "Sessió 2: Idees i recerca" },
+                    { id: 'bloque3', label: 'Sessió 3: Tesi' },
+                    { id: 'bloque4', label: 'Sessió 4: Paràgrafs i conclusió' },
+                    { id: 'evaluacion', label: "Sessió 5: Disseny d'app" },
+                    { id: 'postTest', label: 'Sessió 6: Post-avaluació' },
+                    { id: 'relatora', label: 'Investigadora Responsable' },
+                ],
+                courseData: {
+                    descripcion: {
+                        icon: 'info', title: "Presentació del Projecte", pageHeader: "Projecte AI4EFL", details: [], introVideoUrl: "https://www.youtube.com/embed/S0ixNE8DMbg?si=sHtuMuGZCFc6BncJ",
+                        projectTitle: "Recerca: Aplicació de la Intel·ligència Artificial en l'Aprenentatge Adaptatiu de l'Anglès com a Llengua Estrangera",
+                        ethicsText: `Aquesta recerca ha estat aprovada pel Comitè d'Ètica CEIPSA amb el codi d'aprovació <a href="https://drive.google.com/file/d/1LukEK-LfJ4z1cjMoalnoo3tCNeo7LQxr/view?usp=drive_link" target="_blank" class="text-sky-600 underline hover:text-sky-800 font-semibold">veure aprovació (CEIPSA 05/2025)</a>, en la sessió del 10 de juny de 2025.`,
+                        organizedBy: "Organitzat per:",
+                        participating: "Universitats participants:",
+                        visitWebsite: "Visitar el lloc del projecte"
+                    },
+                    preTest: { icon: 'clipboard-list', title: "Sessió 0: Pre-avaluació", content: "Identificar el nivell inicial de competència en l'escriptura d'assajos en anglès mitjançant la producció d'un assaig amb el suport d'un esquema detallat, sense l'ús d'intel·ligència artificial." },
+                    estructura: { icon: 'sitemap', title: "Sessions del Projecte", customHtml: `<div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg border border-gray-200"><img src="https://roxanarebolledo.com/ai4efl/sequence-ca.png" alt="Seqüència del Projecte" class="w-full h-auto rounded-lg"></div>` },
+                    bloque1: { icon: 'book-open', title: "Sessió 1: Autoavaluació i feedback amb IA", content: "Desenvolupar la capacitat d'autoavaluar el propi assaig utilitzant una rúbrica adaptada al nivell de l'estudiant. Comparar l'autoavaluació amb el feedback generat per eines d'IA com DeepSeek i Claude, fomentant la reflexió crítica sobre fortaleses i àrees de millora." },
+                    bloque2: { icon: 'cpu', title: "Sessió 2: Pluja d'idees i cerca de fonts", content: "Generar i expandir idees per al desenvolupament d'assajos utilitzant tècniques de pluja d'idees assistides per IA. Explorar i avaluar fonts automatitzades a través de Perplexity per a donar suport als arguments amb fonts fiables." },
+                    bloque3: { icon: 'award', title: "Sessió 3: Aprofundir la tesi", content: "Millorar la formulació, claredat i rellevància de la tesi com a element central de l'assaig. Utilitzar NotebookLM per a organitzar idees i fonts que enforteixin la coherència i l'argumentació en l'escriptura." },
+                    bloque4: { icon: 'puzzle', title: "Sessió 4: Guia pas a pas per a escriure paràgrafs de desenvolupament i conclusió", content: "Escriure paràgrafs de desenvolupament que s'alineïn coherentment con la tesi i incloguin arguments basats en evidència. Produir una conclusió que resumeixi les idees, reafirmi la tesi i proporcioni un tancament lògic." },
+                    evaluacion: { icon: 'award', title: "Sessió 5: Dissenyant una app per a superar debilitats en l'escriptura", content: "Dissenyar una aplicació simple impulsada por IA para abordar una dificultat personal en la escritura de ensayos (por ejemplo, conectores, vocabulario, organización de ideas). Fomentar la autonomía y la creatividad en el uso de herramientas tecnológicas aplicadas a la escritura académica." },
+                    postTest: { icon: 'clipboard-check', title: "Sessió 6: Post-avaluació", content: "Avaluar el progrés en l'escriptura d'assajos mitjançant la producció d'un nou assaig, aquesta vegada només con el esquema bàsic de les parts principals i sense suport d'IA. Comparar els resultats con la pre-avaluació para demostrar el progrés en autonomía, coherència y competencia en la escritura." },
+                    relatora: { icon: 'user', title: "Investigadora Responsable", name: "Roxana Rebolledo Font de la Vall", details: ["Professora d'Anglès i Llicenciada en Educació", "Màster en Comunicació Educativa i NTIC", "Doctora (c) en Tecnologia Educativa", "Certificada en Moodle (MEC)"], website: "roxanarebolledo.com", experienceUrl: "https://roxanarebolledo.com/experiencia", trajectoryUrl: "https://youtu.be/b6HHYKbMCmg?si=zkdyBrYc8xX8EhGa", visitWebsiteButton: "Visitar Lloc Web", aiExperienceButton: "Experiència en IA", careerPathButton: "Trajectòria" }
+                }
+            }
+        };
+
+        let activeSection = 'descripcion';
+        let sidebarOpen = false;
+        let currentLanguage = 'en';
+
+        window.changeLanguage = function(lang) {
+            currentLanguage = lang;
+            renderApp();
+        }
+        
+        // --- Render Functions ---
+        function renderApp() {
+            const currentData = translations[currentLanguage];
+            const courseTitle = currentData.courseData.descripcion.pageHeader;
+            document.getElementById('app').innerHTML = `
+                <!-- Overlay for mobile --><div id="sidebar-overlay" class="${sidebarOpen ? 'fixed' : 'hidden'} inset-0 bg-black bg-opacity-50 z-20 lg:hidden"></div>
+
+                <!-- Sidebar --><aside id="sidebar" class="fixed lg:relative inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300 ease-in-out w-72 h-full z-30 shadow-2xl lg:shadow-none">
+                    ${renderSidebar()}
+                </aside>
+
+                <!-- Main Content --><main class="flex-1 flex flex-col h-screen">
+                    <!-- Main Header with Title and Logo --><div class="w-full bg-gradient-to-r from-sky-400 to-sky-600 p-4 shadow-lg border-b border-sky-700 z-10 flex items-center justify-center relative header-content">
+                        <button id="menu-button" class="lg:hidden text-white absolute left-4">
+                            <i data-lucide="menu" class="w-7 h-7"></i>
+                        </button>
+                        <h1 class="text-xl md:text-3xl font-bold text-white text-center tracking-wide header-title">
+                           ${courseTitle}
+                        </h1>
+                        <div class="absolute right-4 flex space-x-1 sm:space-x-2 lang-buttons-container">
+                            <button onclick="changeLanguage('en')" class="lang-button ${currentLanguage === 'en' ? 'active' : ''}">EN</button>
+                            <button onclick="changeLanguage('es')" class="lang-button ${currentLanguage === 'es' ? 'active' : ''}">ES</button>
+                            <button onclick="changeLanguage('ca')" class="lang-button ${currentLanguage === 'ca' ? 'active' : ''}">CA</button>
+                        </div>
+                    </div>
+
+                    <div id="content-area" class="flex-1 overflow-y-auto">
+                        ${renderContent(activeSection)}
+                    </div>
+                </main>
+            `;
+            // Re-initialize icons and event listeners after every render
+            lucide.createIcons();
+            addEventListeners();
+        }
+
+        function renderSidebar() {
+            const navItems = translations[currentLanguage].navItems;
+            const courseData = translations[currentLanguage].courseData;
+            return `
+                <div class="w-full h-full bg-white text-gray-800 p-5 flex flex-col border-r border-gray-200">
+                    <div class="relative mb-6 pb-4 border-b">
+                        <img src="${sidebarImageUrl}" alt="Course Header" class="w-full h-48 object-cover rounded-lg" />
+                        <button id="close-sidebar-button" class="lg:hidden text-gray-600 hover:text-gray-900 absolute top-2 right-2 bg-white/70 backdrop-blur-sm rounded-full p-1">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                    <nav class="flex-grow">
+                        <ul>
+                            ${navItems.map(item => {
+                                const Icon = courseData[item.id]?.icon;
+                                if (!Icon) return '';
+                                const isActive = activeSection === item.id;
+                                return `
+                                    <li class="mb-2">
+                                        <a href="#" data-section="${item.id}" class="nav-link flex items-center p-3 rounded-lg transition-all duration-300 transform hover:scale-105 ${
+                                            isActive
+                                            ? 'bg-sky-500 text-white shadow-lg'
+                                            : 'hover:bg-sky-100 text-gray-700'
+                                        }">
+                                            <i data-lucide="${Icon}" class="w-5 h-5 mr-3 flex-shrink-0"></i>
+                                            <span class="font-medium">${item.label}</span>
+                                        </a>
+                                    </li>
+                                `;
+                            }).join('')}
+                        </ul>
+                    </nav>
+                </div>
+            `;
+        }
+
+        function renderContent(sectionId) {
+            const courseData = translations[currentLanguage].courseData;
+            const section = courseData[sectionId];
+            if (!section) return '<div>Section not found.</div>';
+
+            const { icon, title, content, name, details, summary, website, experienceUrl, introVideoUrl, videoTitle, trajectoryUrl, customHtml } = section;
+
+            const detailsHtml = details && details.length > 0 ? `
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <ul class="space-y-3">
+                        ${details.map(detail => `
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-6 w-6 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center mr-3 mt-1">
+                                    <span class="font-bold text-sm">✓</span>
+                                </div>
+                                <span class="text-gray-800">${detail}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>` : '';
+
+            const logosHtml = sectionId === 'descripcion' ? `
+                <div class="mt-8 pt-8 border-t border-gray-200">
+                     <div class="text-center mb-6">
+                         <h3 class="text-lg font-semibold text-gray-600">${courseData.descripcion.projectTitle}</h3>
+                         <p class="text-sm text-gray-500 mt-2">${courseData.descripcion.ethicsText}</p>
+                     </div>
+                    <div class="mb-12">
+                        <h3 class="text-center text-lg font-semibold text-gray-600 mb-6">${courseData.descripcion.organizedBy}</h3>
+                        <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+                            <a href="${logo3Link}" target="_blank" rel="noopener noreferrer">
+                                <img src="${logo3Url}" alt="Logo FCNA" class="h-12 md:h-16" />
+                            </a>
+                             <a href="${logo4Link}" target="_blank" rel="noopener noreferrer">
+                                <img src="${logo4Url}" alt="Logo Humanidades" class="h-12 md:h-16" />
+                            </a>
+                             <a href="${logo5Link}" target="_blank" rel="noopener noreferrer">
+                                <img src="${logo5Url}" alt="Logo URV" class="h-16 md:h-20" />
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-center text-lg font-semibold text-gray-600 mb-6">${courseData.descripcion.participating}</h3>
+                        <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+                            <a href="${logoUnapLink}" target="_blank" rel="noopener noreferrer">
+                                <img src="${logoUnapUrl}" alt="Logo UNAP" class="h-16 md:h-20" />
+                            </a>
+                            <a href="${logoUfroLink}" target="_blank" rel="noopener noreferrer">
+                                <img src="${logoUfroUrl}" alt="Logo UFRO" class="h-16 md:h-20" />
+                            </a>
+                            <a href="${logoUcenLink}" target="_blank" rel="noopener noreferrer">
+                                <img src="${logoUcenUrl}" alt="Logo UCEN" class="h-16 md:h-20" />
+                            </a>
+                        </div>
+                    </div>
+                </div>` : '';
+
+            return `
+                <div class="p-6 sm:p-8 lg:p-10 w-full bg-sky-50">
+                    <div class="max-w-4xl mx-auto">
+                        <div class="flex items-center text-gray-800 mb-6">
+                            <div class="p-3 bg-white rounded-full shadow-md mr-4">
+                               <i data-lucide="${icon}" class="w-8 h-8 text-sky-600"></i>
+                            </div>
+                            <h1 class="text-3xl lg:text-4xl font-bold tracking-tight">${title}</h1>
+                        </div>
+                        
+                        ${customHtml || `
+                        <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+                            ${content ? `<p class="text-lg text-gray-700 leading-relaxed mb-6">${content}</p>` : ''}
+                            ${name ? `<h2 class="text-2xl font-semibold text-gray-800 mb-4">${name}</h2>` : ''}
+
+                            ${introVideoUrl ? `
+                                <div class="mb-6">
+                                    <div class="relative w-full" style="padding-top: 56.25%;">
+                                        <iframe class="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg" src="${introVideoUrl}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-emedia; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+                                <div class="mt-6 text-center">
+                                     <a href="https://sellotic.github.io/AI4EFL/" target="_blank" rel="noopener noreferrer" class="inline-block bg-sky-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-700 transition-colors shadow-md">
+                                        ${courseData.descripcion.visitWebsite}
+                                     </a>
+                                </div>
+                            ` : ''}
+                            
+                            ${detailsHtml}
+                            
+                            ${(website || experienceUrl || trajectoryUrl) ? `
+                                <div class="mt-6 flex flex-wrap gap-4">
+                                    ${website ? `<a href="https://${website}" target="_blank" rel="noopener noreferrer" class="inline-block bg-sky-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-700 transition-colors shadow-md">${courseData.relatora.visitWebsiteButton}</a>` : ''}
+                                    ${experienceUrl ? `<a href="${experienceUrl}" target="_blank" rel="noopener noreferrer" class="inline-block bg-gray-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors shadow-md">${courseData.relatora.aiExperienceButton}</a>` : ''}
+                                    ${trajectoryUrl ? `<a href="${trajectoryUrl}" target="_blank" rel="noopener noreferrer" class="inline-block bg-teal-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-teal-700 transition-colors shadow-md">${courseData.relatora.careerPathButton}</a>` : ''}
+                                </div>` : ''}
+                        </div>
+                        `}
+                        
+                        ${logosHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- Event Listeners ---
+        function addEventListeners() {
+            // Sidebar navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    activeSection = e.currentTarget.dataset.section;
+                    sidebarOpen = false; // Close sidebar on mobile after click
+                    renderApp();
+                });
+            });
+
+            // Mobile menu toggle
+            const menuButton = document.getElementById('menu-button');
+            if(menuButton) {
+                menuButton.addEventListener('click', () => {
+                    sidebarOpen = true;
+                    renderApp();
+                });
+            }
+
+            // Close sidebar button
+            const closeButton = document.getElementById('close-sidebar-button');
+             if(closeButton) {
+                closeButton.addEventListener('click', () => {
+                    sidebarOpen = false;
+                    renderApp();
+                });
+            }
+
+            // Close sidebar via overlay
+            const overlay = document.getElementById('sidebar-overlay');
+            if (overlay) {
+                overlay.addEventListener('click', () => {
+                    sidebarOpen = false;
+                    renderApp();
+                });
+            }
+        }
+
+        // --- Initial Render ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderApp();
+        });
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
