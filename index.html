@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI4EFL Project</title>
     
-    <!-- Google Fonts: Montserrat --><link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Lucide Icons --><script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
         /* Additional styles to ensure the layout takes up the full height */
@@ -39,7 +42,7 @@
             font-weight: bold;
         }
 
-        /* Aplicar Montserrat al título */
+        /* Apply Montserrat to the title */
         .header-title {
             font-family: 'Montserrat', sans-serif;
         }
@@ -52,12 +55,11 @@
             }
             .header-title {
                 font-size: 1.125rem; /* Smaller title on mobile */
-                /* *** NUEVO *** Añadido padding para evitar superposición */
-                padding-left: 44px;  /* Espacio para el botón de menú */
-                padding-right: 90px; /* Espacio para los botones de idioma */
-                box-sizing: border-box; /* Asegura que el padding se calcule correctamente */
+                padding-left: 44px;  /* Space for the menu button */
+                padding-right: 90px; /* Space for the language buttons */
+                box-sizing: border-box; /* Ensures padding is calculated correctly */
             }
-             .lang-buttons-container {
+            .lang-buttons-container {
                 position: absolute;
                 right: 4px; /* A little more to the right */
                 top: 50%;
@@ -66,17 +68,53 @@
                 gap: 4px; /* Space between buttons */
             }
             .header-content {
-                /* justify-content: space-between; */
                 padding: 8px 4px; /* Adjust header padding */
             }
         }
-
+        
+        /* Audio player styling */
+        .audio-player-container {
+            background: linear-gradient(to right, #f8fafc, #e2e8f0);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #cbd5e1;
+        }
+        
+        .audio-title {
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+            font-size: 1.125rem;
+        }
+        
+        .audio-player {
+            width: 100%;
+            height: 40px;
+            border-radius: 8px;
+        }
+        
+        /* Custom audio player styling */
+        audio::-webkit-media-controls-panel {
+            background-color: #e0f2fe;
+        }
+        
+        audio::-webkit-media-controls-play-button {
+            background-color: #0ea5e9;
+            border-radius: 50%;
+        }
+        
+        audio::-webkit-media-controls-current-time-display,
+        audio::-webkit-media-controls-time-remaining-display {
+            color: #0f172a;
+        }
     </style>
 </head>
 <body>
-
     <div id="app" class="flex h-screen bg-gray-100 font-sans">
-        <!-- The application content will be rendered here --></div>
+        <!-- The application content will be rendered here -->
+    </div>
 
     <script>
         // --- Logo and Link URLs ---
@@ -133,6 +171,15 @@
                                 <img src="https://roxanarebolledo.com/ai4efl/sequence-en.png" alt="Project Sequence" class="w-full h-auto rounded-lg">
                             </div>
                             
+                            <!-- Audio Player Section -->
+                            <div class="audio-player-container">
+                                <div class="audio-title">Listen to the microlesson introduction:</div>
+                                <audio controls class="audio-player">
+                                    <source src="https://roxanarebolledo.com/ai4efl/sessions/microlessons.wav" type="audio/wav">
+                                    Your browser does not support the audio element.
+                                </audio>
+                            </div>
+                            
                             <div class="bg-white p-8 md:p-12 rounded-2xl shadow-lg w-full border border-gray-200 mt-8">
                                 <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 text-center">Microlesson Structure</h1>
                                 <p class="text-lg text-gray-600 mb-6">Sessions 1–5 are structured as a sequence of microlessons, each following the same three-step format to ensure consistency, guided practice, and proper data collection across universities:</p>
@@ -148,7 +195,7 @@
                     bloque1: { 
                         icon: 'book-open', 
                         title: "Session 1: Self-assessment and AI feedback", 
-                        content: "Develop the ability to self-assess one’s own essay using a rubric adapted to the student’s level. Compare self-assessment with feedback generated by AI tools like DeepSeek and Claude, fostering critical reflection on strengths and areas for improvement.",
+                        content: "Develop the ability to self-assess one's own essay using a rubric adapted to the student's level. Compare self-assessment with feedback generated by AI tools like DeepSeek and Claude, fostering critical reflection on strengths and areas for improvement.",
                         imageUrl: "https://roxanarebolledo.com/ai4efl/sessions/s1/sequence.png",
                         imageSubtitle: "Session 1 sequence"
                     },
@@ -195,6 +242,15 @@
                         customHtml: `
                             <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg border border-gray-200">
                                 <img src="https://roxanarebolledo.com/ai4efl/sequence-es.png" alt="Secuencia del Proyecto" class="w-full h-auto rounded-lg">
+                            </div>
+                            
+                            <!-- Audio Player Section -->
+                            <div class="audio-player-container">
+                                <div class="audio-title">Escuche la introducción a las microlecciones:</div>
+                                <audio controls class="audio-player">
+                                    <source src="https://roxanarebolledo.com/ai4efl/sessions/microlessons.wav" type="audio/wav">
+                                    Su navegador no soporta el elemento de audio.
+                                </audio>
                             </div>
                             
                             <div class="bg-white p-8 md:p-12 rounded-2xl shadow-lg w-full border border-gray-200 mt-8">
@@ -261,6 +317,15 @@
                                 <img src="https://roxanarebolledo.com/ai4efl/sequence-ca.png" alt="Seqüència del Projecte" class="w-full h-auto rounded-lg">
                             </div>
 
+                            <!-- Audio Player Section -->
+                            <div class="audio-player-container">
+                                <div class="audio-title">Escolteu la introducció a les microl·liçons:</div>
+                                <audio controls class="audio-player">
+                                    <source src="https://roxanarebolledo.com/ai4efl/sessions/microlessons.wav" type="audio/wav">
+                                    El vostre navegador no admet l'element d'àudio.
+                                </audio>
+                            </div>
+
                             <div class="bg-white p-8 md:p-12 rounded-2xl shadow-lg w-full border border-gray-200 mt-8">
                                 <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 text-center">Estructura de les Microlliçons</h1>
                                 <p class="text-lg text-gray-600 mb-6">Les sessions 1–5 estan estructurades com una seqüència de microlliçons, cadascuna seguint el mateix format de tres passos per garantir la coherència, la pràctica guiada i la correcta recollida de dades entre universitats:</p>
@@ -304,14 +369,18 @@
             const currentData = translations[currentLanguage];
             const courseTitle = currentData.courseData.descripcion.pageHeader;
             document.getElementById('app').innerHTML = `
-                <!-- Overlay for mobile --><div id="sidebar-overlay" class="${sidebarOpen ? 'fixed' : 'hidden'} inset-0 bg-black bg-opacity-50 z-20 lg:hidden"></div>
+                <!-- Overlay for mobile -->
+                <div id="sidebar-overlay" class="${sidebarOpen ? 'fixed' : 'hidden'} inset-0 bg-black bg-opacity-50 z-20 lg:hidden"></div>
 
-                <!-- Sidebar --><aside id="sidebar" class="fixed lg:relative inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300 ease-in-out w-72 h-full z-30 shadow-2xl lg:shadow-none">
+                <!-- Sidebar -->
+                <aside id="sidebar" class="fixed lg:relative inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300 ease-in-out w-72 h-full z-30 shadow-2xl lg:shadow-none">
                     ${renderSidebar()}
                 </aside>
 
-                <!-- Main Content --><main class="flex-1 flex flex-col h-screen">
-                    <!-- Main Header with Title and Logo --><div class="w-full bg-gradient-to-r from-sky-400 to-sky-600 p-4 shadow-lg border-b border-sky-700 z-10 flex items-center justify-center relative header-content">
+                <!-- Main Content -->
+                <main class="flex-1 flex flex-col h-screen">
+                    <!-- Main Header with Title and Logo -->
+                    <div class="w-full bg-gradient-to-r from-sky-400 to-sky-600 p-4 shadow-lg border-b border-sky-700 z-10 flex items-center justify-center relative header-content">
                         <button id="menu-button" class="lg:hidden text-white absolute left-4">
                             <i data-lucide="menu" class="w-7 h-7"></i>
                         </button>
@@ -331,19 +400,17 @@
                 </main>
             `;
             
-            // *** CORRECCIÓN ***
-            // 1. Llamar a addEventListeners PRIMERO para asegurar que la navegación funcione.
+            // Add event listeners
             addEventListeners();
             
-            // 2. Llamar a lucide.createIcons DESPUÉS y dentro de un setTimeout
-            //    Aumentar el tiempo a 50ms para dar más margen.
+            // Initialize Lucide icons
             setTimeout(() => {
                 if (typeof lucide !== 'undefined' && lucide.createIcons) {
                     lucide.createIcons();
                 } else {
                     console.error("Lucide icons could not be loaded or are not ready.");
                 }
-            }, 50); // Mantenido en 50ms para estabilidad
+            }, 50);
         }
 
         function renderSidebar() {
@@ -387,10 +454,10 @@
             const section = courseData[sectionId];
             if (!section) return '<div>Section not found.</div>';
 
-            // Desestructurar las nuevas propiedades de imagen
+            // Destructure the new image properties
             const { icon, title, content, name, details, summary, website, experienceUrl, introVideoUrl, videoTitle, customHtml, imageUrl, imageSubtitle } = section;
 
-            // HTML condicional para la nueva imagen
+            // Conditional HTML for the new image
             const imageHtml = (imageUrl && imageSubtitle) ? `
                 <div class="mt-8 pt-6 border-t border-gray-200">
                     <h3 class="text-xl font-semibold text-gray-800 mb-4 text-center">${imageSubtitle}</h3>
@@ -462,7 +529,7 @@
                         <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
                             ${content ? `<p class="text-lg text-gray-700 leading-relaxed mb-6">${content}</p>` : ''}
                             
-                            <!-- Insertar el HTML de la imagen aquí -->${imageHtml}
+                            <!-- Insert the image HTML here -->${imageHtml}
 
                             ${name ? `<h2 class="text-2xl font-semibold text-gray-800 mb-4">${name}</h2>` : ''}
 
@@ -536,13 +603,10 @@
         }
 
         // --- Initial Render ---
-        // Esperar a que toda la página (incluyendo scripts) se cargue
+        // Wait for the entire page (including scripts) to load
         window.addEventListener('load', () => {
             renderApp();
         });
-
     </script>
 </body>
 </html>
-
-
